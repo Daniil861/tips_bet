@@ -686,27 +686,44 @@
             left_elem_col = col - 1;
         }
         if (document.getElementById(`gem_${row}_${col}`)) {
-            removeGemsNew(row, col);
-            document.getElementById(`gem_${row}_${col}`).remove();
+            document.getElementById(`gem_${row}_${col}`).classList.add("_bomb");
+            setTimeout((() => {
+                removeGemsNew(row, col);
+                document.getElementById(`gem_${row}_${col}`).remove();
+            }), 500);
         }
         if (document.getElementById(`gem_${top_elem_row}_${top_elem_col}`)) {
-            removeGemsNew(top_elem_row, top_elem_col);
-            document.getElementById(`gem_${top_elem_row}_${top_elem_col}`).remove();
+            document.getElementById(`gem_${top_elem_row}_${top_elem_col}`).classList.add("_bomb");
+            setTimeout((() => {
+                removeGemsNew(top_elem_row, top_elem_col);
+                document.getElementById(`gem_${top_elem_row}_${top_elem_col}`).remove();
+            }), 500);
         }
         if (document.getElementById(`gem_${left_elem_row}_${left_elem_col}`)) {
-            removeGemsNew(left_elem_row, left_elem_col);
-            document.getElementById(`gem_${left_elem_row}_${left_elem_col}`).remove();
+            document.getElementById(`gem_${left_elem_row}_${left_elem_col}`).classList.add("_bomb");
+            setTimeout((() => {
+                removeGemsNew(left_elem_row, left_elem_col);
+                document.getElementById(`gem_${left_elem_row}_${left_elem_col}`).remove();
+            }), 500);
         }
         if (document.getElementById(`gem_${right_elem_row}_${right_elem_col}`)) {
-            removeGemsNew(right_elem_row, right_elem_col);
-            document.getElementById(`gem_${right_elem_row}_${right_elem_col}`).remove();
+            document.getElementById(`gem_${right_elem_row}_${right_elem_col}`).classList.add("_bomb");
+            setTimeout((() => {
+                removeGemsNew(right_elem_row, right_elem_col);
+                document.getElementById(`gem_${right_elem_row}_${right_elem_col}`).remove();
+            }), 500);
         }
         if (document.getElementById(`gem_${bottom_elem_row}_${bottom_elem_col}`)) {
-            removeGemsNew(bottom_elem_row, bottom_elem_col);
-            document.getElementById(`gem_${bottom_elem_row}_${bottom_elem_col}`).remove();
+            document.getElementById(`gem_${bottom_elem_row}_${bottom_elem_col}`).classList.add("_bomb");
+            setTimeout((() => {
+                removeGemsNew(bottom_elem_row, bottom_elem_col);
+                document.getElementById(`gem_${bottom_elem_row}_${bottom_elem_col}`).remove();
+            }), 500);
         }
-        config.gameState = config.gameStates[3];
-        checkMoving();
+        setTimeout((() => {
+            config.gameState = config.gameStates[3];
+            checkMoving();
+        }), 500);
     }
     function get_bonus_magnite(block) {
         block.classList.add("_magnite");

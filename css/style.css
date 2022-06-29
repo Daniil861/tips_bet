@@ -1913,6 +1913,9 @@ body._loaded {
 .gem._anim {
   animation: gem 0.5s ease 2;
 }
+.gem._bomb {
+  animation: gem-bomb 0.5s ease;
+}
 @media (min-height: 37.5em) {
   .gem {
     width: 5.3125rem;
@@ -2094,5 +2097,19 @@ body._loaded {
   }
   90% {
     transform: translate3d(0, 0, 10px) rotate(0);
+  }
+}
+@keyframes gem-bomb {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotate(0) scale(1);
+  }
+  80% {
+    opacity: 0.5;
+    transform: translate3d(0, 0, 30px) rotate(180deg) scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 0, 30px) rotate(180deg) scale(2);
   }
 }
