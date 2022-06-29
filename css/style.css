@@ -509,29 +509,13 @@ body._loaded {
 .volume {
   background: url("../img/icons/volume.png") center/contain no-repeat;
   position: absolute;
+  top: auto;
+  bottom: 0.625rem;
+  left: auto;
+  right: 0.625rem;
   width: 1.875rem;
   height: 1.875rem;
   z-index: 2;
-}
-@supports (top: clamp( 7.5rem , 4.75rem  +  8vw , 8.75rem )) {
-  .volume {
-    top: clamp( 7.5rem , 4.75rem  +  8vw , 8.75rem );
-  }
-}
-@supports not (top: clamp( 7.5rem , 4.75rem  +  8vw , 8.75rem )) {
-  .volume {
-    top: calc(7.5rem + 1.25 * (100vw - 34.375rem) / 15.625);
-  }
-}
-@supports (left: clamp( 1.375rem , 0.6875rem  +  2vw , 1.6875rem )) {
-  .volume {
-    left: clamp( 1.375rem , 0.6875rem  +  2vw , 1.6875rem );
-  }
-}
-@supports not (left: clamp( 1.375rem , 0.6875rem  +  2vw , 1.6875rem )) {
-  .volume {
-    left: calc(1.375rem + 0.3125 * (100vw - 34.375rem) / 15.625);
-  }
 }
 @media (min-height: 37.5em) {
   .volume {
@@ -620,14 +604,14 @@ body._loaded {
   font-weight: 900;
   white-space: nowrap;
 }
-@supports (font-size: clamp( 2.875rem , 0.0192307692rem  +  8.3076923077vw , 6.25rem )) {
+@supports (font-size: clamp( 2.5rem , -0.1442307692rem  +  7.6923076923vw , 5.625rem )) {
   .win__sub-text {
-    font-size: clamp( 2.875rem , 0.0192307692rem  +  8.3076923077vw , 6.25rem );
+    font-size: clamp( 2.5rem , -0.1442307692rem  +  7.6923076923vw , 5.625rem );
   }
 }
-@supports not (font-size: clamp( 2.875rem , 0.0192307692rem  +  8.3076923077vw , 6.25rem )) {
+@supports not (font-size: clamp( 2.5rem , -0.1442307692rem  +  7.6923076923vw , 5.625rem )) {
   .win__sub-text {
-    font-size: calc(2.875rem + 3.375 * (100vw - 34.375rem) / 40.625);
+    font-size: calc(2.5rem + 3.125 * (100vw - 34.375rem) / 40.625);
   }
 }
 .win__text {
@@ -1615,6 +1599,9 @@ body._loaded {
   height: 100%;
   object-fit: contain;
 }
+.bonuses__image._anim {
+  animation: rotate-gem 0.5s ease infinite;
+}
 .bonuses__count {
   position: absolute;
   top: -0.9375rem;
@@ -1886,6 +1873,7 @@ body._loaded {
   position: relative;
   height: 100%;
   padding: 0.625rem;
+  perspective: 31.25rem;
 }
 .field__wrapper._hold {
   pointer-events: none;
@@ -1893,11 +1881,11 @@ body._loaded {
 
 .gem {
   position: absolute;
-  border: 2px solid transparent;
-  background-size: 90% 90%;
+  background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
   border-radius: 0.9375rem;
+  border: 2px solid transparent;
 }
 @supports (width: clamp( 2.8125rem , -0.075rem  +  8.4vw , 4.125rem )) {
   .gem {
@@ -1919,23 +1907,8 @@ body._loaded {
     height: calc(2.8125rem + 1.3125 * (100vw - 34.375rem) / 15.625);
   }
 }
-.gem_1 {
-  background-color: #3d6201;
-}
-.gem_2 {
-  background-color: #c53a5b;
-}
-.gem_3 {
-  background-color: #f3a994;
-}
-.gem_4 {
-  background-color: #ff8800;
-}
-.gem_5 {
-  background-color: #ffb801;
-}
 .gem._magnite {
-  animation: rotate-gem 0.5s ease infinite;
+  animation: rotate-gem 0.7s ease infinite;
 }
 .gem._anim {
   animation: gem 0.5s ease 2;
@@ -1946,7 +1919,7 @@ body._loaded {
     height: 5.3125rem;
   }
 }
-@media (max-height: 20em) {
+@media (max-height: 19.0625em) {
   .gem {
     width: 2.8125rem;
     height: 2.8125rem;
@@ -2082,13 +2055,16 @@ body._loaded {
   }
 }
 @keyframes gem {
-  0% {
-    opacity: 1;
-    transform: scale(1);
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
   }
-  100% {
-    opacity: 0.5;
-    transform: scale(1.2);
+  20%, 60% {
+    transform: translate3d(0, 0, 15px) rotate(-5deg);
+    box-shadow: 0 0 5px #777, 0 0 15px rgba(119, 119, 119, 0.6), 0 0 25px rgba(119, 119, 119, 0.2);
+  }
+  40%, 80% {
+    transform: translate3d(0, 0, 15px) rotate(5deg);
+    box-shadow: 0 0 5px #777, 0 0 15px rgba(119, 119, 119, 0.6), 0 0 25px rgba(119, 119, 119, 0.2);
   }
 }
 @keyframes scale_image {
@@ -2105,18 +2081,18 @@ body._loaded {
     transform: translate3d(0, 0, 0);
   }
   20% {
-    transform: translate3d(0, 0, 50px) rotate(-5deg);
+    transform: translate3d(0, 0, 10px) rotate(-5deg);
   }
   40% {
     transform: translate3d(0, 0, 0) rotate(0deg);
   }
   60% {
-    transform: translate3d(0, 0, 50px) rotate(5deg);
+    transform: translate3d(0, 0, 10px) rotate(5deg);
   }
   80% {
     transform: translate3d(0, 0, 0) rotate(0);
   }
   90% {
-    transform: translate3d(0, 0, 50px) rotate(0);
+    transform: translate3d(0, 0, 10px) rotate(0);
   }
 }

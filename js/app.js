@@ -120,7 +120,6 @@
     const config_game = {
         row: 0,
         col: 0,
-        count: 0,
         pin: 0
     };
     function writeBonusesCount() {
@@ -163,56 +162,99 @@
         }));
     }
     function checkCompleteCandy(number) {
-        if (+sessionStorage.getItem("candy-1") > 0) {
-            countCandyPoints(1);
-            if (+sessionStorage.getItem("candy-1") > 9) document.querySelector(".candy-score__count_1").classList.remove("_hide");
-        }
-        if (+sessionStorage.getItem("candy-2") > 0) {
-            countCandyPoints(2);
-            if (+sessionStorage.getItem("candy-2") > 9) document.querySelector(".candy-score__count_2").classList.remove("_hide");
-        }
-        if (+sessionStorage.getItem("candy-3") > 0) {
-            countCandyPoints(3);
-            if (+sessionStorage.getItem("candy-3") > 9) document.querySelector(".candy-score__count_3").classList.remove("_hide");
-        }
-        if (+sessionStorage.getItem("candy-4") > 0) {
-            countCandyPoints(4);
-            if (+sessionStorage.getItem("candy-4") > 9) document.querySelector(".candy-score__count_4").classList.remove("_hide");
-        }
-        if (+sessionStorage.getItem("candy-5") > 0) {
+        if (1 == number) {
+            if (+sessionStorage.getItem("candy-1") > 0) {
+                countCandyPoints(1);
+                if (+sessionStorage.getItem("candy-1") > 9) setTimeout((() => {
+                    document.querySelector(".candy-score__count_1").classList.remove("_hide");
+                }), 2e3);
+            }
+        } else if (2 == number) {
+            if (+sessionStorage.getItem("candy-2") > 0) {
+                countCandyPoints(2);
+                if (+sessionStorage.getItem("candy-2") > 9) setTimeout((() => {
+                    document.querySelector(".candy-score__count_2").classList.remove("_hide");
+                }), 2e3);
+            }
+        } else if (3 == number) {
+            if (+sessionStorage.getItem("candy-3") > 0) {
+                countCandyPoints(3);
+                if (+sessionStorage.getItem("candy-3") > 9) setTimeout((() => {
+                    document.querySelector(".candy-score__count_3").classList.remove("_hide");
+                }), 2e3);
+            }
+        } else if (4 == number) {
+            if (+sessionStorage.getItem("candy-4") > 0) {
+                countCandyPoints(4);
+                if (+sessionStorage.getItem("candy-4") > 9) setTimeout((() => {
+                    document.querySelector(".candy-score__count_4").classList.remove("_hide");
+                }), 2e3);
+            }
+        } else if (5 == number) if (+sessionStorage.getItem("candy-5") > 0) {
             countCandyPoints(5);
-            if (+sessionStorage.getItem("candy-5") > 9) document.querySelector(".candy-score__count_5").classList.remove("_hide");
+            if (+sessionStorage.getItem("candy-5") > 9) setTimeout((() => {
+                document.querySelector(".candy-score__count_5").classList.remove("_hide");
+            }), 2e3);
         }
     }
     function countCandyPoints(number) {
-        if (+sessionStorage.getItem(`candy-${number}`) > 0) {
-            let count = sessionStorage.getItem(`candy-${number}`);
-            let num = 0;
-            let block_visible = 0;
-            if (+count > 9) {
-                num = count.split("");
-                sessionStorage.setItem(`coeff-bet-${number}`, num[0]);
-                block_visible = num[1];
-            } else {
-                sessionStorage.setItem(`coeff-bet-${number}`, 0);
-                block_visible = +count;
-            }
-            document.querySelector(`.candy-score__count_${number}`).textContent = sessionStorage.getItem(`coeff-bet-${number}`);
-            let length = 0;
-            document.querySelectorAll(`.candy-score__block_${number}`).forEach((item => {
-                console.log(item);
-                if (item.classList.contains("_hide")) length++;
-            }));
-            if (length < 10) document.querySelectorAll(`.candy-score__block_${number}`).forEach(((item, index) => {
-                if (index <= block_visible - 1) item.classList.remove("_hide");
-            })); else {
-                document.querySelectorAll(`.candy-score__block_${number}`).forEach((item => item.classList.add("_hide")));
-                document.querySelectorAll(`.candy-score__block_${number}`).forEach(((item, index) => {
-                    if (index <= block_visible - 1) item.classList.remove("_hide");
-                }));
-            }
-            if (1 == number) sessionStorage.setItem("bet-1", .5 * sessionStorage.getItem(`coeff-bet-1`)); else if (2 == number) sessionStorage.setItem("bet-2", 1 * sessionStorage.getItem(`coeff-bet-2`)); else if (3 == number) sessionStorage.setItem("bet-3", 2 * sessionStorage.getItem(`coeff-bet-3`)); else if (4 == number) sessionStorage.setItem("bet-4", 5 * sessionStorage.getItem(`coeff-bet-4`)); else if (5 == number) sessionStorage.setItem("bet-5", 10 * sessionStorage.getItem(`coeff-bet-5`));
+        let count = sessionStorage.getItem(`candy-${number}`);
+        let num = 0;
+        let block_visible = 0;
+        if (+count > 9) {
+            num = count.split("");
+            sessionStorage.setItem(`coeff-bet-${number}`, num[0]);
+            block_visible = num[1];
+        } else {
+            sessionStorage.setItem(`coeff-bet-${number}`, 0);
+            block_visible = +count;
         }
+        setTimeout((() => {
+            document.querySelector(`.candy-score__count_${number}`).textContent = sessionStorage.getItem(`coeff-bet-${number}`);
+        }), 2e3);
+        if (count > 9) {
+            console.log("count больше 9");
+            let destroyBlocks = +sessionStorage.getItem("current-destroy-candys");
+            let countBefore = count - destroyBlocks;
+            if (countBefore < 10) {
+                console.log("До добавления было меньше 10");
+                document.querySelectorAll(`.candy-score__block_${number}`).forEach(((item, index) => {
+                    if (item.classList.contains("_hide")) item.classList.remove("_hide");
+                }));
+                setTimeout((() => {
+                    document.querySelectorAll(`.candy-score__block_${number}`).forEach((item => item.classList.add("_hide")));
+                    document.querySelectorAll(`.candy-score__block_${number}`).forEach(((item, index) => {
+                        if (index <= block_visible - 1) item.classList.remove("_hide");
+                    }));
+                }), 2500);
+            } else {
+                console.log("До добавления уже было больше 10");
+                let decadeBefore = String(count - destroyBlocks).split("")[0];
+                let decadeAfter = String(count).split("")[0];
+                console.log(`decadeAfter - ${decadeAfter}`);
+                console.log(`decadeBefore - ${decadeBefore}`);
+                if (+decadeAfter > +decadeBefore) {
+                    console.log("Сменился десяток");
+                    document.querySelectorAll(`.candy-score__block_${number}`).forEach(((item, index) => {
+                        if (item.classList.contains("_hide")) item.classList.remove("_hide");
+                    }));
+                    setTimeout((() => {
+                        document.querySelectorAll(`.candy-score__block_${number}`).forEach((item => item.classList.add("_hide")));
+                        document.querySelectorAll(`.candy-score__block_${number}`).forEach(((item, index) => {
+                            if (index <= block_visible - 1) item.classList.remove("_hide");
+                        }));
+                    }), 2500);
+                } else {
+                    console.log("Десяток не сменился");
+                    document.querySelectorAll(`.candy-score__block_${number}`).forEach(((item, index) => {
+                        if (index <= block_visible - 1) item.classList.remove("_hide");
+                    }));
+                }
+            }
+        } else document.querySelectorAll(`.candy-score__block_${number}`).forEach(((item, index) => {
+            if (index <= block_visible - 1) item.classList.remove("_hide");
+        }));
+        if (1 == number) sessionStorage.setItem("bet-1", .5 * sessionStorage.getItem(`coeff-bet-1`)); else if (2 == number) sessionStorage.setItem("bet-2", 1 * sessionStorage.getItem(`coeff-bet-2`)); else if (3 == number) sessionStorage.setItem("bet-3", 2 * sessionStorage.getItem(`coeff-bet-3`)); else if (4 == number) sessionStorage.setItem("bet-4", 5 * sessionStorage.getItem(`coeff-bet-4`)); else if (5 == number) sessionStorage.setItem("bet-5", 10 * sessionStorage.getItem(`coeff-bet-5`));
     }
     function checkWinCount() {
         let bet = +sessionStorage.getItem("current-bet");
@@ -225,6 +267,7 @@
         let sum = arr.reduce(((a, b) => a + b));
         document.querySelector(".level__point_1").textContent = sum;
         countWidthFrameLevel();
+        return sum;
     }
     const config = {
         countRows: 5,
@@ -254,6 +297,7 @@
     if (document.querySelector(".game") && document.querySelector(".preloader").classList.contains("_hide")) {
         changeSizeGem();
         initGame();
+        delete_money(+sessionStorage.getItem("current-bet"), ".check");
         config.countScore = 0;
         writeBonusesCount();
         createStartStorrageCandys();
@@ -261,13 +305,10 @@
         check_game_over();
     }
     function changeSizeGem() {
-        if (window_height <= 320) config.gemSize = 45; else if (window_height > 320 && window_height < 600) config.gemSize = 66; else if (window_height > 600) config.gemSize = 85;
+        if (window_height <= 305) config.gemSize = 45; else if (window_height > 320 && window_height < 600) config.gemSize = 66; else if (window_height > 600) config.gemSize = 85;
         if (window_width <= 600) config.gemSize = 45; else if (window_width > 600 && window_width < 720) config.gemSize = 55; else if (window_width > 720 && window_width < 900) config.gemSize = 66; else if (window_width > 900) config.gemSize = 85;
     }
     function findCollisionsGems() {
-        console.log("FIND COLLISIONS");
-        console.log(components.gems);
-        config_game.count++;
         if (components.gems[config_game.row][config_game.col] == components.gems[config_game.row][config_game.col + 1]) {
             let gemNumber = components.gems[config_game.row][config_game.col] + 1;
             if (components.gems[config_game.row][config_game.col + 1] == components.gems[config_game.row][config_game.col + 2]) {
@@ -386,13 +427,22 @@
     }
     function scoreInc(count, item) {
         let number = +item;
-        console.log(item);
-        console.log(number);
         if (1 == number) sessionStorage.setItem("candy-1", +sessionStorage.getItem("candy-1") + count); else if (2 == number) sessionStorage.setItem("candy-2", +sessionStorage.getItem("candy-2") + count); else if (3 == number) sessionStorage.setItem("candy-3", +sessionStorage.getItem("candy-3") + count); else if (4 == number) sessionStorage.setItem("candy-4", +sessionStorage.getItem("candy-4") + count); else if (5 == number) sessionStorage.setItem("candy-5", +sessionStorage.getItem("candy-5") + count);
+        checkCompleteCandy(number);
+        checkCompleteLevel();
     }
     function check_game_over() {
         let state = checkGroups();
-        if (0 == state) {
+        let points = checkCompleteLevel();
+        if (points > 99) {
+            let money = checkWinCount();
+            add_money(money, ".check", 500, 1500);
+            document.querySelector(".win__sub-text").textContent = "Level completed!";
+            document.querySelector(".win__text").textContent = money;
+            setTimeout((() => {
+                document.querySelector(".win").classList.add("_active");
+            }), 1e3);
+        } else if (0 == state && 0 == +sessionStorage.getItem("bomb") && 0 == +sessionStorage.getItem("magnite")) {
             let money = checkWinCount();
             if (money > 0) {
                 add_money(money, ".check", 500, 1500);
@@ -405,7 +455,7 @@
             setTimeout((() => {
                 document.querySelector(".win").classList.add("_active");
             }), 1e3);
-        }
+        } else if (0 == state && (+sessionStorage.getItem("bomb") > 0 || +sessionStorage.getItem("magnite") > 0)) document.querySelectorAll(".bonuses__image").forEach((item => item.classList.add("_anim")));
     }
     function checkGroups() {
         let items = Array.from(document.querySelectorAll(".gem"));
@@ -442,10 +492,16 @@
     function checkCollisionBlock(block) {
         let numberCollision = 0;
         if (block.dataset.collision) numberCollision = block.dataset.collision; else {
-            block.classList.add("_anim");
-            setTimeout((() => {
-                block.classList.remove("_anim");
-            }), 1e3);
+            let blockCollision = 0;
+            document.querySelectorAll(".gem").forEach((item => {
+                if (item.dataset.collision) blockCollision = item.dataset.collision;
+            }));
+            document.querySelectorAll(".gem").forEach((item => {
+                if (item.dataset.collision == blockCollision) item.classList.add("_anim");
+                setTimeout((() => {
+                    item.classList.remove("_anim");
+                }), 1e3);
+            }));
             return false;
         }
         document.querySelectorAll(".gem").forEach((item => {
@@ -462,6 +518,7 @@
         }));
         let numberCandy = parseInt(numberCollision.split("_")[0]);
         scoreInc(removeBlocks, numberCandy);
+        sessionStorage.setItem("current-destroy-candys", removeBlocks);
         config.gameState = config.gameStates[3];
         gemFade();
     }
@@ -470,6 +527,7 @@
         components.gems[row][col] = -1;
         let num = document.getElementById(`gem_${row}_${col}`).dataset.number;
         scoreInc(1, num);
+        sessionStorage.setItem("current-destroy-candys", 1);
         config.gameState = config.gameStates[3];
         gemFade();
     }
@@ -485,6 +543,7 @@
     }
     function checkMoving() {
         config.movingItems--;
+        console.log(config.movingItems);
         if (0 == config.movingItems) switch (config.gameState) {
           case config.gameStates[3]:
             checkFalling();
@@ -496,17 +555,13 @@
         }
     }
     function gemFade() {
-        $(".remove").each((function() {
+        document.querySelectorAll(".remove").forEach((item => {
             config.movingItems++;
-            $(this).animate({
-                opacity: 0
-            }, {
-                duration: 200,
-                complete: function() {
-                    $(this).remove();
-                    checkMoving();
-                }
-            });
+            item.style.opacity = "0";
+            setTimeout((() => {
+                item.remove();
+                checkMoving();
+            }), 100);
         }));
     }
     function checkFalling() {
@@ -549,8 +604,6 @@
         } else {
             config.gameState = config.gameStates[0];
             player.selectedRow = -1;
-            checkCompleteCandy();
-            checkCompleteLevel();
             setTimeout((() => {
                 document.querySelectorAll(".gem").forEach((item => {
                     if (item.dataset.collision) item.removeAttribute("data-collision");
@@ -575,7 +628,6 @@
             right_elem_col = col + 1;
             bottom_elem_row = row + 1;
             bottom_elem_col = col;
-            console.log("Применяем бомбу не с краев");
         }
         if (0 == row && col > 0 && col < 4) {
             left_elem_row = row;
@@ -657,11 +709,11 @@
         checkMoving();
     }
     function get_bonus_magnite(block) {
-        console.log(components.gems);
-        config.movingItems++;
         block.classList.add("_magnite");
+        document.querySelector(".field__wrapper").classList.add("_hold");
         setTimeout((() => {
             document.querySelector(".field__wrapper").classList.add("_magnite");
+            document.querySelector(".field__wrapper").classList.remove("_hold");
         }), 500);
     }
     function get_bonus_magnite_2(block) {
@@ -674,9 +726,9 @@
             }
         }));
         let row_1 = parseInt(gem_1.getAttribute("id").split("_")[1]);
-        let col_1 = parseInt(gem_1.getAttribute("id").split("_")[1]);
+        let col_1 = parseInt(gem_1.getAttribute("id").split("_")[2]);
         let row_2 = parseInt(block.getAttribute("id").split("_")[1]);
-        let col_2 = parseInt(block.getAttribute("id").split("_")[1]);
+        let col_2 = parseInt(block.getAttribute("id").split("_")[2]);
         let number_2 = +block.dataset.number;
         gem_1.style.backgroundImage = `url('img/game/icon-${number_2}.svg')`;
         gem_1.classList.remove(`gem_${number_1}`);
@@ -686,16 +738,8 @@
         block.classList.remove(`gem_${number_2}`);
         block.classList.add(`gem_${number_1}`);
         block.dataset.number = number_1;
-        console.log(components.gems);
-        console.log(components.gems[row_1][col_1]);
-        console.log(components.gems[row_2][col_2]);
-        number_1 -= 1;
-        number_2 -= 1;
-        console.log(number_1);
-        console.log(number_2);
-        components.gems[row_2][col_2] = number_1;
-        components.gems[row_1][col_1] = number_2;
-        console.log(components.gems);
+        components.gems[row_2][col_2] = number_1 - 1;
+        components.gems[row_1][col_1] = number_2 - 1;
         document.querySelectorAll(".gem").forEach((item => {
             if (item.classList.contains("_magnite")) item.classList.remove("_magnite");
         }));
@@ -708,7 +752,24 @@
         }));
         setTimeout((() => {
             findCollisionsGems();
-        }), 500);
+        }), 100);
+    }
+    if (document.querySelector(".main") || document.querySelector(".game")) {
+        const audio_main = new Audio;
+        audio_main.preload = "auto";
+        audio_main.src = "files/audio_bg.mp3";
+        audio_main.loop = [ true ];
+        audio_main.volume = .3;
+        document.addEventListener("click", (e => {
+            let targetElement = e.target;
+            if (targetElement.closest(".volume")) {
+                if (targetElement.closest(".volume") && !targetElement.closest(".volume").classList.contains("_hide")) audio_main.volume = 0; else if (targetElement.closest(".volume") && targetElement.closest(".volume").classList.contains("_hide")) {
+                    audio_main.volume = .3;
+                    audio_main.play();
+                }
+                targetElement.closest(".volume").classList.toggle("_hide");
+            }
+        }));
     }
     document.addEventListener("click", (e => {
         let targetElement = e.target;
@@ -774,12 +835,15 @@
             config_game.pin = 0;
             resetInfoCandys();
             removeAllGems();
+            delete_money(+sessionStorage.getItem("current-bet"), ".check");
             setTimeout((() => {
                 document.querySelector(".win").classList.remove("_active");
+            }), 100);
+            setTimeout((() => {
                 if (document.querySelector(".win").classList.contains("_loose")) document.querySelector(".win").classList.remove("_loose");
             }), 500);
         }
-        if (targetElement.closest(".win__button_home")) resetInfoCandys();
+        if (targetElement.closest(".win__button_home") || targetElement.closest(".bonuses__button-back")) resetInfoCandys();
         if (targetElement.closest(".bonuses__item_1")) if (0 != +sessionStorage.getItem("bomb")) {
             sessionStorage.setItem("bomb", +sessionStorage.getItem("bomb") - 1);
             targetElement.closest(".bonuses__item_1").classList.add("_anim");
@@ -794,15 +858,17 @@
             document.querySelector(`.bonuses__count_1`).textContent = sessionStorage.getItem(`bomb`);
         }
         if (targetElement.closest(".gem") && document.querySelector(".bonuses__item_2").classList.contains("_anim") && !document.querySelector(".field__wrapper").classList.contains("_magnite")) {
-            console.log("=======first=========");
             let elem = targetElement.closest(".gem");
             get_bonus_magnite(elem);
         }
         if (targetElement.closest(".gem") && document.querySelector(".bonuses__item_2").classList.contains("_anim") && document.querySelector(".field__wrapper").classList.contains("_magnite")) {
-            console.log("=======second=========");
             let elem = targetElement.closest(".gem");
             get_bonus_magnite_2(elem);
             document.querySelector(`.bonuses__count_2`).textContent = sessionStorage.getItem(`magnite`);
+        }
+        if (targetElement.closest(".bonuses__buttons")) {
+            let state = checkGroups();
+            if (0 == state && document.querySelector(".bonuses__image").classList.contains("_anim")) document.querySelectorAll(".bonuses__image").forEach((item => item.classList.remove("_anim")));
         }
     }));
     window["FLS"] = true;
